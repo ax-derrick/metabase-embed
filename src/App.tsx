@@ -15,6 +15,8 @@ import Dashboard from './pages/Dashboard';
 import Analytics from './pages/Analytics';
 import './App.css';
 
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
 const { Sider, Header, Content } = Layout;
 const { Text } = Typography;
 
@@ -77,7 +79,7 @@ function AppLayout() {
       >
         {/* Logo */}
         <div className="logo">
-          <img src="/axmed-logo.png" alt="Axmed" height="28" />
+          <img src={`${BASE_URL}axmed-logo.png`} alt="Axmed" height="28" />
         </div>
 
         {/* Navigation Menu */}
