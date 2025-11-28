@@ -72,7 +72,7 @@ function Analytics() {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Total Revenue"
+              title="My Total Revenue"
               value={1234567}
               precision={2}
               prefix={<DollarOutlined />}
@@ -83,7 +83,7 @@ function Analytics() {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Active Tenders"
+              title="My Active Tenders"
               value={42}
               prefix={<ShoppingCartOutlined />}
               valueStyle={{ color: '#4F46E5' }}
@@ -93,7 +93,7 @@ function Analytics() {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Win Rate"
+              title="My Win Rate"
               value={68.5}
               precision={1}
               valueStyle={{ color: '#3f8600' }}
@@ -105,7 +105,7 @@ function Analytics() {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Pending Bids"
+              title="My Pending Bids"
               value={12}
               prefix={<FileTextOutlined />}
               valueStyle={{ color: '#cf1322' }}
