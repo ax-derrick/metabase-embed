@@ -11,10 +11,10 @@ const { Title } = Typography;
 
 // Metabase embed URLs (tokens expire 2025-12-05)
 const MARKETPLACE_IFRAME_URL =
-  'https://axmed.metabaseapp.com/embed/dashboard/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6eyJkYXNoYm9hcmQiOjE4NDl9LCJwYXJhbXMiOnt9LCJleHAiOjE3NjQ5Mzk2MjMsImlhdCI6MTc2NDMzNDgyMn0.J1RtFbwp15EP5mCdDJs77HpVGZYmt6s1Wt8AeDvXtR8#bordered=false&titled=false&refresh=60&downloads=false';
+  'https://axmed.metabaseapp.com/embed/dashboard/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6eyJkYXNoYm9hcmQiOjE4NDl9LCJwYXJhbXMiOnt9LCJleHAiOjE3NjQ5Mzk2MjMsImlhdCI6MTc2NDMzNDgyMn0.J1RtFbwp15EP5mCdDJs77HpVGZYmt6s1Wt8AeDvXtR8#bordered=false&titled=false&refresh=3600&downloads=false';
 
 const MY_COUNTRY_IFRAME_URL =
-  'https://axmed.metabaseapp.com/embed/dashboard/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6eyJkYXNoYm9hcmQiOjE4NDl9LCJwYXJhbXMiOnsiY291bnRyeSI6Ik5pZ2VyaWEifSwiZXhwIjoxNzY0OTM5NjIzLCJpYXQiOjE3NjQzMzQ4MjJ9.XVWBg3vRdzP6RqRpX0F3ovqaEC2Go1Y2Ing5Vf6-q9Q#bordered=false&titled=false&refresh=60&downloads=false';
+  'https://axmed.metabaseapp.com/embed/dashboard/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6eyJkYXNoYm9hcmQiOjE4NDl9LCJwYXJhbXMiOnsiY291bnRyeSI6Ik5pZ2VyaWEifSwiZXhwIjoxNzY0OTM5NjIzLCJpYXQiOjE3NjQzMzQ4MjJ9.XVWBg3vRdzP6RqRpX0F3ovqaEC2Go1Y2Ing5Vf6-q9Q#bordered=false&titled=false&refresh=3600&downloads=false';
 
 // Metabase iframe resizer script URL
 const METABASE_RESIZER_URL = 'https://axmed.metabaseapp.com/app/iframeResizer.js';
