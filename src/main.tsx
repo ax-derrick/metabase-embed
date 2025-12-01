@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#4F46E5',
+          colorPrimary: '#392AB0',
           borderRadius: 6,
           fontFamily: "'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
         },
