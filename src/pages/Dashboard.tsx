@@ -1,8 +1,7 @@
-import { Typography, Card, Row, Col, Button, Spin, Progress, Tag, Statistic, theme, Steps, List, Avatar, Tooltip, Table, Dropdown } from 'antd';
+import { Typography, Card, Row, Col, Button, Spin, Progress, Tag, theme, Steps, List, Avatar, Tooltip, Table, Dropdown } from 'antd';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  CheckCircleFilled,
   FileTextOutlined,
   TrophyOutlined,
   RightOutlined,
@@ -87,15 +86,7 @@ function Dashboard() {
   };
   const supplierTier = getSupplierTier();
 
-  // Get metrics based on selected step
-  const getStepMetrics = () => {
-    if (selectedStepIndex === 0) return { activeBids: 0, openOpportunities: 156 };
-    if (selectedStepIndex === 1) return { activeBids: 2, openOpportunities: 89 };
-    if (selectedStepIndex === 2) return { activeBids: 5, openOpportunities: 42 };
-    if (selectedStepIndex >= 3) return { activeBids: 12, openOpportunities: 23 };
-    return { activeBids: 0, openOpportunities: 156 };
-  };
-  const stepMetrics = getStepMetrics();
+
 
   return (
     <div className="dashboard-merged">
@@ -112,7 +103,7 @@ function Dashboard() {
                       <div style={{ fontWeight: 600, marginBottom: 8 }}>Journey Progress</div>
                       <div>Your score is based on your procurement journey completion:</div>
                       <ul style={{ margin: '8px 0', paddingLeft: 16 }}>
-                        {journeySteps.map((step, index) => (
+                        {journeySteps.map((step) => (
                           <li key={step.key} style={{ marginBottom: 4 }}>
                             {step.title}: {step.status === 'completed' ? 'Complete' : step.status === 'current' ? 'In Progress' : 'Pending'}
                           </li>
@@ -424,143 +415,143 @@ function Dashboard() {
         {/* ============ SIDEBAR COLUMN (RIGHT) ============ */}
         <Col xs={24} lg={8}>
           <div style={{ position: 'sticky', top: 76 }}>
-          {/* Quick Actions (QABs) */}
-          <Card title="Quick Actions" className="quick-actions-card" style={{ marginBottom: 12 }}>
-            {/* Primary CTA - Add Products (hidden on mobile, shown in sticky footer) */}
-            <Dropdown
-              menu={{
-                items: [
-                  { key: 'bulk', label: 'Bulk Upload', icon: <UploadOutlined /> },
-                  { key: 'single', label: 'Add Single Item', icon: <PlusOutlined /> },
-                ],
-                onClick: ({ key }) => {
-                  if (key === 'bulk') {
-                    window.location.href = '/portfolio';
-                  } else {
-                    window.location.href = '/portfolio/add';
+            {/* Quick Actions (QABs) */}
+            <Card title="Quick Actions" className="quick-actions-card" style={{ marginBottom: 12 }}>
+              {/* Primary CTA - Add Products (hidden on mobile, shown in sticky footer) */}
+              <Dropdown
+                menu={{
+                  items: [
+                    { key: 'bulk', label: 'Bulk Upload', icon: <UploadOutlined /> },
+                    { key: 'single', label: 'Add Single Item', icon: <PlusOutlined /> },
+                  ],
+                  onClick: ({ key }) => {
+                    if (key === 'bulk') {
+                      window.location.href = '/portfolio';
+                    } else {
+                      window.location.href = '/portfolio/add';
+                    }
                   }
-                }
-              }}
-              trigger={['click']}
-              className="add-products-desktop"
-            >
-              <Button
-                type="primary"
-                icon={<UploadOutlined />}
-                block
-                size="large"
-                style={{ marginBottom: 12, height: 48 }}
+                }}
+                trigger={['click']}
+                className="add-products-desktop"
               >
-                Add Products
-              </Button>
-            </Dropdown>
+                <Button
+                  type="primary"
+                  icon={<UploadOutlined />}
+                  block
+                  size="large"
+                  style={{ marginBottom: 12, height: 48 }}
+                >
+                  Add Products
+                </Button>
+              </Dropdown>
 
-            {/* Secondary Actions */}
-            <Row gutter={[8, 8]}>
-              {quickActions.filter(a => a.key !== 'upload').map((action) => (
-                <Col span={12} key={action.key}>
-                  <Link to={action.link}>
-                    <Button
-                      block
-                      style={{
-                        padding: '8px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: 4,
-                        height: 70,
-                        justifyContent: 'center',
-                        backgroundColor: '#f5f5f5',
-                        border: 'none'
-                      }}
-                    >
-                      <div style={{ fontSize: 18, color: token.colorPrimary }}>
-                        {iconMap[action.icon]}
-                      </div>
-                      <span style={{ fontSize: 11, whiteSpace: 'normal', lineHeight: 1.1, textAlign: 'center' }}>
-                        {action.label}
-                      </span>
-                    </Button>
-                  </Link>
-                </Col>
-              ))}
+              {/* Secondary Actions */}
+              <Row gutter={[8, 8]}>
+                {quickActions.filter(a => a.key !== 'upload').map((action) => (
+                  <Col span={12} key={action.key}>
+                    <Link to={action.link}>
+                      <Button
+                        block
+                        style={{
+                          padding: '8px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: 4,
+                          height: 70,
+                          justifyContent: 'center',
+                          backgroundColor: '#f5f5f5',
+                          border: 'none'
+                        }}
+                      >
+                        <div style={{ fontSize: 18, color: token.colorPrimary }}>
+                          {iconMap[action.icon]}
+                        </div>
+                        <span style={{ fontSize: 11, whiteSpace: 'normal', lineHeight: 1.1, textAlign: 'center' }}>
+                          {action.label}
+                        </span>
+                      </Button>
+                    </Link>
+                  </Col>
+                ))}
+              </Row>
+            </Card>
+
+            {/* RFQ Metrics - Desktop Only */}
+            <Row gutter={[8, 8]} style={{ marginBottom: 12 }} className="rfq-metrics-desktop">
+              <Col span={12}>
+                <Tooltip title="Total number of active RFQs available on the platform that you can submit bids for">
+                  <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                    <Text type="secondary" style={{ fontSize: 12 }}>Available RFQs to bid</Text>
+                    <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>387</div>
+                  </Card>
+                </Tooltip>
+              </Col>
+              <Col span={12}>
+                <Tooltip title="RFQs that match products in your portfolio - these are your best opportunities to win">
+                  <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                    <Text type="secondary" style={{ fontSize: 12 }}>RFQs matching Portfolio</Text>
+                    <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>342</div>
+                  </Card>
+                </Tooltip>
+              </Col>
+              <Col span={12}>
+                <Tooltip title="RFQs for products not currently in your portfolio - consider adding these products to expand your opportunities">
+                  <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                    <Text type="secondary" style={{ fontSize: 12 }}>RFQs not in Portfolio</Text>
+                    <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>45</div>
+                  </Card>
+                </Tooltip>
+              </Col>
+              <Col span={12}>
+                <Tooltip title="Total number of unique products (SKUs) you have added to your portfolio">
+                  <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                    <Text type="secondary" style={{ fontSize: 12 }}>Total SKUs in Portfolio</Text>
+                    <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>500</div>
+                  </Card>
+                </Tooltip>
+              </Col>
             </Row>
-          </Card>
 
-          {/* RFQ Metrics - Desktop Only */}
-          <Row gutter={[8, 8]} style={{ marginBottom: 12 }} className="rfq-metrics-desktop">
-            <Col span={12}>
-              <Tooltip title="Total number of active RFQs available on the platform that you can submit bids for">
-                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
-                  <Text type="secondary" style={{ fontSize: 12 }}>Available RFQs to bid</Text>
-                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>387</div>
-                </Card>
-              </Tooltip>
-            </Col>
-            <Col span={12}>
-              <Tooltip title="RFQs that match products in your portfolio - these are your best opportunities to win">
-                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
-                  <Text type="secondary" style={{ fontSize: 12 }}>RFQs matching Portfolio</Text>
-                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>342</div>
-                </Card>
-              </Tooltip>
-            </Col>
-            <Col span={12}>
-              <Tooltip title="RFQs for products not currently in your portfolio - consider adding these products to expand your opportunities">
-                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
-                  <Text type="secondary" style={{ fontSize: 12 }}>RFQs not in Portfolio</Text>
-                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>45</div>
-                </Card>
-              </Tooltip>
-            </Col>
-            <Col span={12}>
-              <Tooltip title="Total number of unique products (SKUs) you have added to your portfolio">
-                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
-                  <Text type="secondary" style={{ fontSize: 12 }}>Total SKUs in Portfolio</Text>
-                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>500</div>
-                </Card>
-              </Tooltip>
-            </Col>
-          </Row>
+            {/* Resources & Help */}
+            <Card className="resources-card" bodyStyle={{ padding: 16 }}>
+              <div className="resource-links">
+                <a href="/profile" className="resource-link">
+                  <UserOutlined className="resource-icon" />
+                  <div className="resource-content">
+                    <Text strong>Complete Your Profile</Text>
+                    <Text type="secondary" style={{ fontSize: 12 }}>Improve your visibility to buyers</Text>
+                  </div>
+                  <RightOutlined className="resource-arrow" />
+                </a>
+                <a href="/handbook" className="resource-link">
+                  <RocketOutlined className="resource-icon" />
+                  <div className="resource-content">
+                    <Text strong>New Supplier Handbook</Text>
+                    <Text type="secondary" style={{ fontSize: 12 }}>Get started guide & best practices</Text>
+                  </div>
+                  <RightOutlined className="resource-arrow" />
+                </a>
+                <a href="/tips" className="resource-link">
+                  <InfoCircleOutlined className="resource-icon" />
+                  <div className="resource-content">
+                    <Text strong>Bidding Tips</Text>
+                    <Text type="secondary" style={{ fontSize: 12 }}>Win more tenders with these strategies</Text>
+                  </div>
+                  <RightOutlined className="resource-arrow" />
+                </a>
+              </div>
+            </Card>
 
-          {/* Resources & Help */}
-          <Card className="resources-card" bodyStyle={{ padding: 16 }}>
-            <div className="resource-links">
-              <a href="/profile" className="resource-link">
-                <UserOutlined className="resource-icon" />
-                <div className="resource-content">
-                  <Text strong>Complete Your Profile</Text>
-                  <Text type="secondary" style={{ fontSize: 12 }}>Improve your visibility to buyers</Text>
-                </div>
-                <RightOutlined className="resource-arrow" />
-              </a>
-              <a href="/handbook" className="resource-link">
-                <RocketOutlined className="resource-icon" />
-                <div className="resource-content">
-                  <Text strong>New Supplier Handbook</Text>
-                  <Text type="secondary" style={{ fontSize: 12 }}>Get started guide & best practices</Text>
-                </div>
-                <RightOutlined className="resource-arrow" />
-              </a>
-              <a href="/tips" className="resource-link">
-                <InfoCircleOutlined className="resource-icon" />
-                <div className="resource-content">
-                  <Text strong>Bidding Tips</Text>
-                  <Text type="secondary" style={{ fontSize: 12 }}>Win more tenders with these strategies</Text>
-                </div>
-                <RightOutlined className="resource-arrow" />
-              </a>
+            {/* Footer Links */}
+            <div className="dashboard-footer-links">
+              <span className="copyright">© 2025 Axmed</span>
+              <span>|</span>
+              <a href="/terms">Terms</a>
+              <span>|</span>
+              <a href="/privacy">Privacy</a>
             </div>
-          </Card>
-
-          {/* Footer Links */}
-          <div className="dashboard-footer-links">
-            <span className="copyright">© 2025 Axmed</span>
-            <span>|</span>
-            <a href="/terms">Terms</a>
-            <span>|</span>
-            <a href="/privacy">Privacy</a>
-          </div>
           </div>
         </Col>
       </Row>
