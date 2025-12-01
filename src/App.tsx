@@ -178,6 +178,7 @@ function AppLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [expandedTenders, setExpandedTenders] = useState<number[]>([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const menuItems = [
     {
@@ -218,12 +219,13 @@ function AppLayout() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      {/* Sidebar */}
+      {/* Sidebar - Hidden on mobile */}
       <Sider
         theme="light"
         width={200}
         collapsedWidth={64}
         collapsed={sidebarCollapsed}
+        className="desktop-sider"
         style={{
           borderRight: '1px solid #f0f0f0',
           position: 'fixed',
@@ -320,27 +322,35 @@ function AppLayout() {
         </div>
       </Sider>
 
-      <Layout style={{ marginLeft: sidebarCollapsed ? 64 : 200, background: '#fafafa', transition: 'margin-left 0.2s ease' }}>
+      <Layout className="main-layout" style={{ marginLeft: sidebarCollapsed ? 64 : 200, background: '#fafafa', transition: 'margin-left 0.2s ease' }}>
         {/* Header */}
         <Header className="header">
           <div className="header-content">
+            {/* Desktop: Collapse toggle */}
             <Button
               type="text"
               icon={sidebarCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              className="sidebar-toggle-btn"
+              className="sidebar-toggle-btn desktop-only"
             />
+            {/* Mobile: Menu toggle + Logo */}
+            <div className="mobile-header-left">
+              <Button
+                type="text"
+                icon={<MenuOutlined />}
+                onClick={() => setMobileMenuOpen(true)}
+                className="mobile-menu-toggle"
+              />
+              <img src={`${BASE_URL}axmed-logo.png`} alt="Axmed" height="24" className="mobile-logo" />
+            </div>
             {/* Right side menu items */}
             <Space size="large" className="header-menu">
               <div className="draft-bids-btn" onClick={() => setDrawerOpen(true)} style={{ cursor: 'pointer' }}>
                 <FileTextOutlined className="draft-bids-icon" />
-                <span>Draft Bids</span>
+                <span className="draft-bids-text">Draft Bids</span>
                 <Badge count={totalBidsCount} size="small" className="draft-bids-badge" />
               </div>
             </Space>
-
-            {/* Mobile menu button */}
-            <Button type="primary" className="mobile-menu-btn" icon={<MenuOutlined />} />
           </div>
         </Header>
 
@@ -490,6 +500,93 @@ function AppLayout() {
               )}
             </div>
           ))}
+        </div>
+      </Drawer>
+
+      {/* Mobile Navigation Drawer */}
+      <Drawer
+        placement="left"
+        width={280}
+        onClose={() => setMobileMenuOpen(false)}
+        open={mobileMenuOpen}
+        className="mobile-nav-drawer"
+        styles={{ body: { padding: 0 } }}
+      >
+        {/* Logo */}
+        <div className="mobile-drawer-logo">
+          <img src={`${BASE_URL}axmed-logo.png`} alt="Axmed" height="28" />
+        </div>
+
+        {/* Navigation Menu */}
+        <Menu
+          mode="inline"
+          selectedKeys={[location.pathname]}
+          items={menuItems}
+          onClick={({ key }) => {
+            navigate(key);
+            setMobileMenuOpen(false);
+          }}
+          style={{ borderRight: 'none' }}
+        />
+
+        {/* Impact Report Card */}
+        <div style={{ padding: '16px 12px' }}>
+          <a
+            href="https://axmed.com/impact-report"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="impact-report-card"
+            style={{ position: 'relative', bottom: 'auto', left: 'auto', right: 'auto', margin: 0 }}
+          >
+            <div className="impact-report-icon">
+              <HeartOutlined />
+            </div>
+            <div className="impact-report-content">
+              <span className="impact-report-title">Impact Report</span>
+              <span className="impact-report-subtitle">See how Axmed is making a difference</span>
+            </div>
+          </a>
+        </div>
+
+        {/* Bottom section */}
+        <div className="mobile-drawer-bottom">
+          {/* Support Link */}
+          <a
+            href="https://form.asana.com/?k=syQQO9QJls5IRuUzlbUDTQ&d=1207382794046065"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sidebar-support-link"
+          >
+            <QuestionCircleOutlined />
+            <span>Support</span>
+          </a>
+
+          {/* Profile */}
+          <div className="sidebar-profile">
+            <Dropdown
+              menu={{
+                items: [
+                  { key: 'profile', label: 'Profile' },
+                  { key: 'settings', label: 'Settings' },
+                  { type: 'divider' },
+                  { key: 'logout', label: 'Logout' },
+                ] as MenuProps['items'],
+              }}
+              trigger={['click']}
+              placement="topRight"
+            >
+              <Space className="profile-trigger sidebar-profile-trigger">
+                <Avatar
+                  src="https://axmed-demo-static-files.s3.eu-west-1.amazonaws.com/uploads/CIPLA-logo381353.png"
+                  size={32}
+                />
+                <div className="profile-info">
+                  <span className="org-name">Cipla Pharmaceuticals</span>
+                </div>
+                <DownOutlined className="caret-icon" />
+              </Space>
+            </Dropdown>
+          </div>
         </div>
       </Drawer>
     </Layout>

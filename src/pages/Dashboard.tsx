@@ -16,6 +16,7 @@ import {
   ClockCircleOutlined,
   UserOutlined,
   RocketOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import {
   userData,
@@ -152,11 +153,11 @@ function Dashboard() {
                   </div>
                 </Tooltip>
               </Col>
-              <Col flex={1}>
-                <Title level={3} style={{ margin: 0 }}>
+              <Col flex={1} className="welcome-text-col">
+                <Title level={3} className="welcome-title" style={{ margin: 0 }}>
                   Welcome back, {userData.name}!
                 </Title>
-                <Text type="secondary">{userData.organization}</Text>
+                <Text type="secondary" className="welcome-org">{userData.organization}</Text>
                 <div style={{ marginTop: 4 }}>
                   <Tag color={supplierTier.color}>{supplierTier.label}</Tag>
                 </div>
@@ -177,9 +178,11 @@ function Dashboard() {
 
           {/* Procurement Journey */}
           <Card className="journey-card" style={{ marginBottom: 12, padding: 0 }} bodyStyle={{ padding: '16px 48px 16px 24px' }}>
+            {/* Desktop: Full steps view */}
             <List
               itemLayout="horizontal"
               dataSource={[journeySteps[selectedStepIndex] || journeySteps[0]]}
+              className="journey-desktop"
               renderItem={(item) => (
                 <List.Item style={{ padding: 0, border: 'none' }}>
                   <List.Item.Meta
@@ -194,7 +197,7 @@ function Dashboard() {
                       </div>
                     }
                   />
-                  <div style={{ flex: 1, marginLeft: 48, minWidth: 400 }}>
+                  <div className="journey-steps-container">
                     <Steps
                       current={selectedStepIndex}
                       size="small"
@@ -210,6 +213,34 @@ function Dashboard() {
                 </List.Item>
               )}
             />
+            {/* Mobile: Current step focus */}
+            <div className="journey-mobile">
+              <div className="journey-mobile-header">
+                <Avatar
+                  style={{ backgroundColor: token.colorPrimary }}
+                  icon={journeySteps[selectedStepIndex]?.icon ? iconMap[journeySteps[selectedStepIndex].icon!] : <TrophyOutlined />}
+                />
+                <div className="journey-mobile-info">
+                  <Text strong style={{ fontSize: 14 }}>{journeySteps[selectedStepIndex]?.title}</Text>
+                  <Text type="secondary" style={{ fontSize: 12 }}>{journeySteps[selectedStepIndex]?.description}</Text>
+                </div>
+              </div>
+              <div className="journey-mobile-progress">
+                <div className="journey-mobile-dots">
+                  {journeySteps.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`journey-dot ${index < selectedStepIndex ? 'completed' : ''} ${index === selectedStepIndex ? 'current' : ''}`}
+                      onClick={() => setSelectedStepIndex(index)}
+                    />
+                  ))}
+                </div>
+                <Text type="secondary" style={{ fontSize: 11 }}>Step {selectedStepIndex + 1} of {journeySteps.length}</Text>
+              </div>
+              <Link to="/tenders" className="journey-mobile-cta">
+                {journeySteps[selectedStepIndex]?.cta || 'View Details'} <RightOutlined style={{ fontSize: 10 }} />
+              </Link>
+            </div>
           </Card>
 
           {/* Available Opportunities */}
@@ -326,6 +357,42 @@ function Dashboard() {
             />
           </Card>
 
+          {/* RFQ Metrics - Mobile Only */}
+          <Row gutter={[8, 8]} style={{ marginBottom: 12 }} className="rfq-metrics-mobile">
+            <Col span={12}>
+              <Tooltip title="Total number of active RFQs available on the platform that you can submit bids for">
+                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                  <Text type="secondary" style={{ fontSize: 12 }}>Available RFQs to bid</Text>
+                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>387</div>
+                </Card>
+              </Tooltip>
+            </Col>
+            <Col span={12}>
+              <Tooltip title="RFQs that match products in your portfolio - these are your best opportunities to win">
+                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                  <Text type="secondary" style={{ fontSize: 12 }}>RFQs matching Portfolio</Text>
+                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>342</div>
+                </Card>
+              </Tooltip>
+            </Col>
+            <Col span={12}>
+              <Tooltip title="RFQs for products not currently in your portfolio - consider adding these products to expand your opportunities">
+                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                  <Text type="secondary" style={{ fontSize: 12 }}>RFQs not in Portfolio</Text>
+                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>45</div>
+                </Card>
+              </Tooltip>
+            </Col>
+            <Col span={12}>
+              <Tooltip title="Total number of unique products (SKUs) you have added to your portfolio">
+                <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
+                  <Text type="secondary" style={{ fontSize: 12 }}>Total SKUs in Portfolio</Text>
+                  <div style={{ fontSize: 28, fontWeight: 700, color: '#0a1929', marginTop: 4 }}>500</div>
+                </Card>
+              </Tooltip>
+            </Col>
+          </Row>
+
           {/* Marketplace Pulse */}
           <Card title="Marketplace Pulse" style={{ marginBottom: 12 }} bodyStyle={{ padding: 8 }}>
             <div style={{ position: 'relative', height: 240, overflow: 'hidden', borderRadius: 8 }}>
@@ -359,7 +426,7 @@ function Dashboard() {
           <div style={{ position: 'sticky', top: 76 }}>
           {/* Quick Actions (QABs) */}
           <Card title="Quick Actions" className="quick-actions-card" style={{ marginBottom: 12 }}>
-            {/* Primary CTA - Add Products */}
+            {/* Primary CTA - Add Products (hidden on mobile, shown in sticky footer) */}
             <Dropdown
               menu={{
                 items: [
@@ -375,6 +442,7 @@ function Dashboard() {
                 }
               }}
               trigger={['click']}
+              className="add-products-desktop"
             >
               <Button
                 type="primary"
@@ -419,8 +487,8 @@ function Dashboard() {
             </Row>
           </Card>
 
-          {/* RFQ Metrics */}
-          <Row gutter={[8, 8]} style={{ marginBottom: 12 }}>
+          {/* RFQ Metrics - Desktop Only */}
+          <Row gutter={[8, 8]} style={{ marginBottom: 12 }} className="rfq-metrics-desktop">
             <Col span={12}>
               <Tooltip title="Total number of active RFQs available on the platform that you can submit bids for">
                 <Card className="rfq-metric-card" bodyStyle={{ padding: 16 }}>
@@ -496,6 +564,59 @@ function Dashboard() {
           </div>
         </Col>
       </Row>
+
+      {/* Mobile Sticky Footer - Add Products + Quick Actions */}
+      <div className="mobile-sticky-footer">
+        <div className="mobile-sticky-footer-content">
+          <Dropdown
+            menu={{
+              items: [
+                { key: 'bulk', label: 'Bulk Upload', icon: <UploadOutlined /> },
+                { key: 'single', label: 'Add Single Item', icon: <PlusOutlined /> },
+              ],
+              onClick: ({ key }) => {
+                if (key === 'bulk') {
+                  window.location.href = '/portfolio';
+                } else {
+                  window.location.href = '/portfolio/add';
+                }
+              }
+            }}
+            trigger={['click']}
+            placement="topRight"
+          >
+            <Button
+              type="primary"
+              icon={<UploadOutlined />}
+              style={{ flex: 1 }}
+            >
+              Add Products
+            </Button>
+          </Dropdown>
+          <Dropdown
+            menu={{
+              items: quickActions.filter(a => a.key !== 'upload').map(action => ({
+                key: action.key,
+                label: action.label,
+                icon: iconMap[action.icon],
+              })),
+              onClick: ({ key }) => {
+                const action = quickActions.find(a => a.key === key);
+                if (action) {
+                  window.location.href = action.link;
+                }
+              }
+            }}
+            trigger={['click']}
+            placement="topRight"
+          >
+            <Button
+              icon={<ThunderboltOutlined />}
+              style={{ width: 40 }}
+            />
+          </Dropdown>
+        </div>
+      </div>
     </div>
   );
 }
