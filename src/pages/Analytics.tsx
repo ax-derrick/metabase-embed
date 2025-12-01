@@ -1,4 +1,4 @@
-import { Typography, Card, Row, Col, Statistic, Spin, Segmented } from 'antd';
+import { Typography, Card, Row, Col, Statistic, Spin, Segmented, theme } from 'antd';
 import { useState, useEffect, useRef } from 'react';
 import {
   ArrowUpOutlined,
@@ -22,6 +22,8 @@ const METABASE_RESIZER_URL = 'https://axmed.metabaseapp.com/app/iframeResizer.js
 type DataView = 'marketplace' | 'my-country';
 
 function Analytics() {
+  const { useToken } = theme;
+  const { token } = useToken();
   const [iframeLoading, setIframeLoading] = useState(true);
   const [dataView, setDataView] = useState<DataView>('marketplace');
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -86,7 +88,7 @@ function Analytics() {
               title="My Active Tenders"
               value={42}
               prefix={<ShoppingCartOutlined />}
-              valueStyle={{ color: '#4F46E5' }}
+              valueStyle={{ color: token.colorPrimary }}
             />
           </Card>
         </Col>
@@ -96,7 +98,7 @@ function Analytics() {
               title="My Win Rate"
               value={68.5}
               precision={1}
-              valueStyle={{ color: '#3f8600' }}
+              valueStyle={{ color: token.colorSuccess }}
               prefix={<ArrowUpOutlined />}
               suffix="%"
             />
@@ -108,7 +110,7 @@ function Analytics() {
               title="My Pending Bids"
               value={12}
               prefix={<FileTextOutlined />}
-              valueStyle={{ color: '#cf1322' }}
+              valueStyle={{ color: token.colorError }}
             />
           </Card>
         </Col>
